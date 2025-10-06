@@ -5,72 +5,81 @@
     <div class="task-input">
       <input
         v-model="newTask"
-        placeholder="Escribe una nueva tarea"
+        placeholder="Escribe aquí tu nueva tarea"
         @keyup.enter="addTask"
       />
       <button @click="addTask">Agregar</button>
     </div>
 
-    <div class="task-sections">
+    <div v-if="hasTasks" class="task-sections">
       <TaskColumn
         title="To Do"
-        color="#ff0707"
+        color="#ffb347"
         :tasks="tasks.todo"
         @remove="removeTask('todo', $event)"
         @move="moveTask('todo', $event)"
       />
       <TaskColumn
         title="Doing"
-        color="#ff0707"
+        color="#ffcc33"
         :tasks="tasks.doing"
         @remove="removeTask('doing', $event)"
         @move="moveTask('doing', $event)"
       />
       <TaskColumn
-        title="Done ✅"
-        color="#ff0707"
+        title="Done"
+        color="#90ee90"
         :tasks="tasks.done"
-        @remove="removeTask('done', $event)"
         @move="moveTask('done', $event)"
       />
     </div>
+
+    <p v-else class="no-tasks">No hay tareas registradas.</p>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, reactive, computed } from 'vue'
 import TaskColumn from './TaskColumn.vue'
 
 const newTask = ref('')
-const tasks = ref({
+const tasks = reactive({
   todo: [],
   doing: [],
   done: []
 })
 
+// ✅ Agregar tarea
 const addTask = () => {
   const text = newTask.value.trim()
   if (text !== '') {
-    tasks.value.todo.push(text)
+    tasks.todo.push(text)
     newTask.value = ''
   }
 }
 
+// ✅ Eliminar tarea
 const removeTask = (column, index) => {
-  tasks.value[column].splice(index, 1)
+  tasks[column].splice(index, 1)
 }
 
+// ✅ Mover tarea entre columnas
 const moveTask = (from, { index, direction }) => {
   const columns = ['todo', 'doing', 'done']
   const fromIndex = columns.indexOf(from)
   const toIndex = fromIndex + direction
 
   if (toIndex >= 0 && toIndex < columns.length) {
-    const task = tasks.value[from][index]
-    tasks.value[from].splice(index, 1)
-    tasks.value[columns[toIndex]].push(task)
+    const task = tasks[from][index]
+    tasks[from].splice(index, 1)
+    tasks[columns[toIndex]].push(task)
   }
 }
+
+// ✅ Mostrar secciones solo si hay tareas
+const hasTasks = computed(() =>
+  tasks.todo.length > 0 || tasks.doing.length > 0 || tasks.done.length > 0
+)
 </script>
 
 <style scoped>
@@ -114,5 +123,13 @@ h1 {
   display: flex;
   justify-content: space-between;
   gap: 20px;
+}
+
+.no-tasks {
+  text-align: center;
+  font-size: 1.3rem;
+  color: #666;
+  margin-top: 40px;
+  font-style: italic;
 }
 </style>

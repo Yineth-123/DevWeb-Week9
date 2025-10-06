@@ -2,7 +2,7 @@
   <div class="section">
     <h2 :style="{ backgroundColor: background }">{{ title }}</h2>
     <ul>
-      <li v-if="tasks.length === 0" class="empty">Sin tareas pendientes</li>
+      <li v-if="tasks.length === 0" class="empty">No hay tareas registradas</li>
       <li v-for="(task, index) in tasks" :key="index">
         {{ task }}
         <div class="actions">
@@ -31,12 +31,12 @@ defineEmits(['remove', 'move'])
   background-color: #ffd57c;
   border-radius: 12px;
   padding: 15px;
-  box-shadow: 0 2px 8px rgba(0, 255, 128, 0.9);
+  box-shadow: 0 2px 8px rgba(26, 13, 13, 0.9);
 }
 
 .section h2 {
   color: rgb(253, 242, 242);
-  background: rgb(255, 208, 0);
+  background: rgb(180, 126, 64);
   border-radius: 8px;
   padding: 8px;
   margin-bottom: 10px;
@@ -48,7 +48,7 @@ ul {
 }
 
 li {
-  background-color: rgb(168, 235, 207);
+  background-color: rgb(228, 208, 182);
   border-radius: 8px;
   padding: 8px;
   margin-bottom: 8px;
